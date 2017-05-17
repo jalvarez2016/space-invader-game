@@ -1,0 +1,12 @@
+#game {
+    border: 10px solid;
+    height:500px;
+    width:500px;
+    text-align: center;
+    margin: auto 30%;
+}
+
+#character{
+    position: relative;
+    top:90%;
+}
