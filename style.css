@@ -4,9 +4,27 @@
     width:500px;
     text-align: center;
     margin: auto 30%;
+    position: relative;
+
 }
 
-#character{
+
+.enemy{
+    width:20px;
+    height:20px;
+    background-color: red;
     position: relative;
-    top:90%;
+}
+
+
+
+
+#paddle{
+    width: 45px;
+    height: 10px;
+    background-color: black;
+    position: relative;
+    top: 460px;
+    left:10px;
+   
 }
