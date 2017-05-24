@@ -1,6 +1,8 @@
 /*global $*/
 $(document).ready(function() {
+   
     setInterval(function(){
+    
         console.log("1 second");
         fall();
     },
@@ -9,15 +11,16 @@ $(document).ready(function() {
 
     function fall(){
         $(".enemy").css("top", $(".enemy").offset().top + 10);
+        collission();
     };
     
     function collission(){
-        var enemyHeight = $(".enemy").offset().top + $("#paddle").height();
-        var enemyWidth = $(".enemy").offset().left + $("#paddle").width();
-        var heroHieght = $("#paddle").offset().top + $("#paddle").height();
-        var heroWidth = $("#paddle").offset().left + $("#paddle").width();
-        if(enemyHeight > heroHieght && enemyWidth ) {
-            $(".enemy").offset().top - 460;
+        var enemyTopPosition = $(".enemy").position().top + $("#paddle").height();
+        var enemyLeftPosition = $(".enemy").position().left + $("#paddle").width();
+        var heroTopPosition = $("#paddle").position().top + $("#paddle").height();
+        var heroLeftPosition = $("#paddle").position().left + $("#paddle").width();
+        if(enemyTopPosition > heroTopPosition) {
+          console.log("hit");
         }
     };
 
@@ -26,11 +29,17 @@ $(document).ready(function() {
 });
 
 $("body").keydown(function(event) {
-    console.log(event)
-    if (event.keyCode ===37) {
-        $("#paddle").css("left", $("#paddle").offset().left- 1);
-    } else if (event.keyCode ===39){
-        $("#paddle").css("left", $("#paddle").offset().left + 1);
+    var offset= $("#paddle").position().left;
+    var interval= 10;
+    var gameWidth = $('#game').width() - $("#paddle").width();
+    console.log(offset);
+    console.log($("#game").width())
+    if (event.keyCode ===37 && offset > 0) {
+        
+        $("#paddle").css("left", offset -interval);
+        
+    } else if (event.keyCode === 39 && offset < gameWidth){
+        $("#paddle").css("left", offset +interval);
     } else{
         return;
     }

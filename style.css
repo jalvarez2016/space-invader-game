@@ -23,8 +23,8 @@
     width: 45px;
     height: 10px;
     background-color: black;
-    position: relative;
-    top: 460px;
+    position: absolute;
+    bottom: 25px;
     left:10px;
    
 }
