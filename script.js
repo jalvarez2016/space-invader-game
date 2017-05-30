@@ -10,17 +10,27 @@ $(document).ready(function() {
     //just change the number 5000 to adjust the time that should pass before the code is executed again (1000ms is 1 second).
 
     function fall(){
-        $(".enemy").css("top", $(".enemy").offset().top + 10);
+        var offset= $(".enemy").position().top;
+        var interval= 10;
+        var gameWidth = $('#game').width() - $(".enemy").width();
+        if ( offset < gameWidth){
+            $(".enemy").css("top", offset + interval);
+        }
         collission();
     };
     
+    function enemyset(){
+        $(".enemy").css("top", $(".enemy").offset().top - 455)
+    }
+    
     function collission(){
-        var enemyTopPosition = $(".enemy").position().top + $("#paddle").height();
+        var enemyTopPosition = $(".enemy").position().top + $(".enemy").height();
         var enemyLeftPosition = $(".enemy").position().left + $("#paddle").width();
         var heroTopPosition = $("#paddle").position().top + $("#paddle").height();
         var heroLeftPosition = $("#paddle").position().left + $("#paddle").width();
-        if(enemyTopPosition > heroTopPosition) {
+        if(enemyTopPosition == heroTopPosition && enemyLeftPosition == heroLeftPosition) {
           console.log("hit");
+          
         }
     };
 
