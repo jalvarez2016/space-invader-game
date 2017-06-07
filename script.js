@@ -1,11 +1,12 @@
 /*global $*/
 
 var score = 1;
+var interval= Math.floor(Math.random()*10);
 
     function prepare(){
         $( ".enemy" ).each(function(index, element) {
-            console.log(index)
-        var $element = $(element)
+            console.log(index);
+        var $element = $(element);
         var origin = Math.floor((Math.random() * 460) + 1);
         $element.css("left", origin);
         console.log(origin);
@@ -14,33 +15,106 @@ var score = 1;
     
 
 $(document).ready(function() {
-    prepare()
+    prepare();
+    powerup();
     setInterval(function(){
     
         console.log("1 second");
         fall();
-        // fallb();
-        // fallc();
+        powerfall();
     },
-    250);
+    50);
     //just change the number 5000 to adjust the time that should pass before the code is executed again (1000ms is 1 second).
     
+    var powerups = [
+    "images/power0.jpg",
+    "images/power1.jpg",
+    "images/power3.jpg",
+    "images/power4.gif"
+    ];
+    
+    function powerup(){
+        var chance = Math.floor(Math.random()*50);
+        if(chance < 11){
+            $(".powerup").attr("src","images/power0.jpg");
+        } else if (chance < 21){
+            $(".powerup").attr("src","images/power1.jpg");
+        } else if (chance < 41){
+            $(".powerup").attr("src","images/power3.jpg");
+        } else if ( chance < 50){
+            $(".powerup").attr("src","images/power4.gif");
+        }
+    }
+    
+    function powerfall(){
+        var offset = $(".powerup").position().top;
+        var interval2 = 10;
+        var gameWidth = $('#game').width() - $(".powerup").width();
+        if ( offset < gameWidth ){
+            $(".powerup").css("top", offset + interval2);
+        } else {
+            $(".powerup").css("top", offset - offset);
+        }
+        powercollision();
+    }
+    
+    function powercollision(){
+    var blueLeft = $("#paddle").offset().left;
+    var redLeft = $(".powerup").offset().left;
+    var blueRight = blueLeft + $("#paddle").width();
+    var redRight = redLeft + $(".powerup").width();
+    var blueUp = $("#paddle").offset().top;
+    var redDown = $(".powerup").offset().top;
+    var blueDown = blueUp + $("#paddle").height();
+    var redUp = redDown + $(".powerup").height();
+    if(blueDown > redDown && blueUp < redUp && blueRight > redLeft && blueLeft < redRight) {
+        console.log("hit");
+        powerset();
+        powerdetermine2();
+    } else if ($(".powerup").position().top > 470) {
+        $(".powerup").css("top",$(".powerup").position().top - $(".powerup").position().top);
+        powerset();
+    } 
+    }
+    
+    function powerdetermine2(){
+        var i = 1;
+        setInterval(function(){
+               i ++;
+               console.log(i+"time left");
+               if ( i < 12){
+               $("#counter").text(score++);
+               }
+            },
+            250);
+    }
+    
 
+    function powerset(){
+        var left = Math.floor((Math.random() * 460) + 1);
+        var height = $(".powerup").position().top;
+        console.log(left);
+        $(".powerup").css("top",$(".powerup").position().top - height);
+        $(".powerup").css("left", left);
+        powerup();
+    }
+    
     function enemyset(element){
         var left = Math.floor((Math.random() * 460) + 1);
+        var height = $(element).position().top;
         console.log(left);
-        $(element).css("top",$(element).position().top - 455);
+        $(element).css("top",$(element).position().top - height);
         $(element).css("left", left);
     }
 
     function fall(){
         $( ".enemy" ).each(function(index, element) {
-            var $element = $(element)
+            var interval2= Math.floor(Math.random()*10);
+            var $element = $(element);
             var offset= $element.position().top;
-            var interval= 10;
             var gameWidth = $('#game').width() - $element.width();
             if ( offset < gameWidth){
-               $element.css("top", offset + interval);
+               $element.css("top", offset + interval2);
             }
             collission($element);
         });
@@ -60,148 +134,94 @@ $(document).ready(function() {
     if(blueDown > redDown && blueUp < redUp && blueRight > redLeft && blueLeft < redRight) {
         console.log("hit");
         $("#counter").text(score++);
-        enemyset(element);
+        element.remove();
+        createnemy();
     } else if (element.position().top > 470) {
         element.css("top",element.position().top - element.position().top);
+        enemyset(element);
     } 
 
 }
 
+    function createnemy(){
+        var math = Math.floor(score/2);
+        
+        for(var i= 0; i < math ; i = i +1){
+            
+            var div = document.createElement('div');
+
+            div.className = 'enemy';
+        
+            document.getElementById('content').appendChild(div);
+        
+            enemyset(div);
+        
+        }
+        
+    }
+
 $("body").keydown(function(event) {
     var offset= $("#paddle").position().left;
-    var interval= 25;
+    var interval2= 25;
     var gameWidth = $('#game').width() - $("#paddle").width();
     console.log(offset);
-    console.log($("#game").width())
+    console.log($("#game").width());
     if (event.keyCode ===37 && offset > 0) {
         
-        $("#paddle").css("left", offset -interval);
+        $("#paddle").css("left", offset -interval2);
         
     } else if (event.keyCode === 39 && offset < gameWidth){
-        $("#paddle").css("left", offset +interval);
+        $("#paddle").css("left", offset +interval2);
     } else{
         return;
     }
 });
 });
 
-    function enemyseta(){
-        var left = Math.floor((Math.random() * 460) + 1);
-        console.log(left);
-        $("#justkillit").css("top",$("#justkillit").position().top - 455);
-        $("#justkillit").css("left", left);
+ 
+ 
+    function powerdetermine(){
+        var img = $(".powerup").src;
+        if( img == "images/power0.jpg" ){
+            setInterval(function(){
+               var i = 1;
+               i ++;
+               console.log(i+"time left");
+               if ( i < 50){
+                interval/2;
+               }
+            },
+            250);
+        } else if ( img == "images/power1.jpg" ){
+            setInterval(function(){
+               var i = 1;
+               i ++;
+               console.log(i+"time left");
+               if ( i < 50){
+                interval*2;
+               }
+            },
+            250);
+        } else if ( img == "images/power3.jpg" ){
+            setInterval(function(){
+               var i = 1;
+               i ++;
+               console.log(i+"time left");
+               if ( i < 50){
+                $("#counter").text(score - 1);
+               }
+            },
+            250);
+        } else if ( img == "images/power4.jpg" ){
+            setInterval(function(){
+               var i = 1;
+               i ++;
+               console.log(i+"time left");
+               if ( i < 50){
+                $("#counter").text(score++);
+               }
+            },
+            250);
+        }
     }
     
-    function enemysetb(){
-        var left = Math.floor((Math.random() * 460) + 1);
-        console.log(left);
-        $("#pleazkillit").css("top",$("#pleazkillit").position().top - 455);
-        $("#pleazkillit").css("left", left);
-    }
-    
-    function enemysetc(){
-        var left = Math.floor((Math.random() * 460) + 1);
-        console.log(left);
-        $("#mustkill").css("top",$("#mustkill").position().top - 455);
-        $("#mustkill").css("left", left);
-    }
-    
-    
-
-    //fall number1
-    function falla(){
-            var offset= $( "#justkillit" ).position().top;
-            var interval= 10;
-            var gameWidth = $('#game').width() - $( "#justkillit" ).width();
-            if ( offset < gameWidth){
-               $( "#justkillit" ).css("top", offset + interval);
-            }
-            collissiona();
-    }
-    
-    //fall number2
-    function fallb(){
-            var offset= $( "#pleazkillit" ).position().top;
-            var interval= 10;
-            var gameWidth = $('#game').width() - $( "#pleazkillit" ).width();
-            if ( offset < gameWidth){
-               $( "#pleazkillit" ).css("top", offset + interval);
-            }
-            collissionb();
-            
-    }
-    
-    function fallc(){
-            var offset= $( "#mustkill" ).position().top;
-            var interval= 10;
-            var gameWidth = $('#game').width() - $( "#mustkill" ).width();
-            if ( offset < gameWidth){
-               $( "#mustkill" ).css("top", offset + interval);
-            }
-            collissionc();
-            
-    }
-    
-    
-    
-    //collision number1
-    function collissiona() {
-    var blueLeft = $("#paddle").offset().left;
-    var redLeft = $( "#justkillit" ).offset().left;
-    var blueRight = blueLeft + $("#paddle").width();
-    var redRight = redLeft + $( "#justkillit" ).width();
-    var blueUp = $("#paddle").offset().top;
-    var redDown = $( "#justkillit" ).offset().top;
-    var blueDown = blueUp + $("#paddle").height();
-    var redUp = redDown + $( "#justkillit" ).height();
-    if(blueDown > redDown && blueUp < redUp && blueRight > redLeft && blueLeft < redRight) {
-        console.log("hit");
-        $("#counter").text(score++);
-        enemyseta();
-    } else if ($( "#justkillit" ).position().top > 470) {
-        $( "#justkillit" ).css("top",$( "#justkillit" ).position().top - $( "#justkillit" ).position().top);
-    } 
-
-}
-    
-    //collision number2
-    function collissionb() {
-    var blueLeft = $("#paddle").offset().left;
-    var redLeft = $( "#pleazkillit" ).offset().left;
-    var blueRight = blueLeft + $("#paddle").width();
-    var redRight = redLeft + $( "#pleazkillit" ).width();
-    var blueUp = $("#paddle").offset().top;
-    var redDown = $( "#pleazkillit" ).offset().top;
-    var blueDown = blueUp + $("#paddle").height();
-    var redUp = redDown + $( "#pleazkillit" ).height();
-    if(blueDown > redDown && blueUp < redUp && blueRight > redLeft && blueLeft < redRight) {
-        console.log("hit");
-        $("#counter").text(score++);
-        enemysetb();
-    } else if ($( "#pleazkillit" ).position().top > 470) {
-        $( "#pleazkillit" ).css("top",$( "#pleazkillit" ).position().top - $( "#pleazkillit" ).position().top);
-    } 
-
-}
-
-  //collision number0
-    function collissionc() {
-    var blueLeft = $("#paddle").offset().left;
-    var redLeft = $( "#mustkill" ).offset().left;
-    var blueRight = blueLeft + $("#paddle").width();
-    var redRight = redLeft + $( "#mustkill" ).width();
-    var blueUp = $("#paddle").offset().top;
-    var redDown = $( "#mustkill" ).offset().top;
-    var blueDown = blueUp + $("#paddle").height();
-    var redUp = redDown + $( "#mustkill" ).height();
-    if(blueDown > redDown && blueUp < redUp && blueRight > redLeft && blueLeft < redRight) {
-        console.log("hit");
-        $("#counter").text(score++);
-        enemysetc();
-    } else if ($( "#mustkill" ).position().top > 470) {
-        $( "#mustkill" ).css("top",$( "#mustkill" ).position().top - $( "#mustkill" ).position().top);
-    } 
-
-}
-
-   

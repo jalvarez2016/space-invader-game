@@ -21,6 +21,11 @@
     font-size:30px;
 }
 
+.powerup{
+    height:40px;
+    width:40px;
+    position:absolute;
+}
 
 #paddle{
     width: 45px;
