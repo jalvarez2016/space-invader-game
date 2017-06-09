@@ -134,6 +134,7 @@ $(document).ready(function() {
     if(blueDown > redDown && blueUp < redUp && blueRight > redLeft && blueLeft < redRight) {
         console.log("hit");
         $("#counter").text(score++);
+        $("#key").text("Nice you caught a body!!! (i couldn't find an accurate represenation of an actual body)")
         element.remove();
         createnemy();
     } else if (element.position().top > 470) {
